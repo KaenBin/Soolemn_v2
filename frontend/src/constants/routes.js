@@ -1,0 +1,33 @@
+export const HOME = "/home";
+export const SHOP = "/shop";
+export const PRODUCTS = "/products";
+export const DISCOUNTED_PRODUCTS = "/discounted";
+export const FEATURED_PRODUCTS = "/featured";
+export const RECOMMENDED_PRODUCTS = "/recommended";
+export const CATEGORIES = "/categories";
+export const DASHBOARD = "/dashboard";
+export const ACCOUNT = "/account";
+export const ACCOUNT_EDIT = "/account/edit";
+
+export const VIEW_ORDER = "/order/:id";
+export const MANAGE_ORDERS = "/order/manage";
+export const MANAGE_PRODUCTS = "/product/manage";
+export const ADD_PRODUCTS = "/product/add";
+export const MANAGE_TRANSPORT = "/transport/manage";
+export const MANAGE_SHOP = "/shop/manage";
+
+export const ADMIN_USERS = "/admin/users";
+export const ADD_PRODUCT = "/admin/add";
+export const EDIT_PRODUCT = "/admin/edit";
+export const SEARCH = "/search/:searchKey";
+export const SIGNIN = "/signin";
+export const SIGNOUT = "/signout";
+export const SIGNUP = "/signup";
+export const FORGOT_PASSWORD = "/forgot_password";
+export const CHECKOUT_STEP_1 = "/checkout/step1";
+export const CHECKOUT_STEP_2 = "/checkout/step2";
+export const CHECKOUT_STEP_3 = "/checkout/step3";
+export const VIEW_PRODUCT = "/product/:id";
+export const CART = "/cart";
+export const CHECKOUT = "/checkout";
+export const CHECKOUT_SUCCESS = "/success";
