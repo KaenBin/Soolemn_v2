@@ -7,7 +7,7 @@ import {
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 import { auth, db, storage } from "./firebase";
-import { getCheckoutUrl, getPortalUrl } from "./stripePayment";
+// import { getCheckoutUrl, getPortalUrl } from "./stripePayment";
 import { readFile, encodeImage } from "@/utils/utils";
 
 class API {

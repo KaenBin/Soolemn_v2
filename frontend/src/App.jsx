@@ -4,8 +4,8 @@ import { PersistGate } from "redux-persist/integration/react";
 import React from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "@/utils/utils";
-import "./App.css";
 import AppRouter from "./routers/AppRouter";
+import { render } from "@testing-library/react";
 
 const App = ({ store, persistor }) => (
   <React.StrictMode>
@@ -25,3 +25,12 @@ App.propTypes = {
 };
 
 export default App;
+
+const customRender = (ui, options) =>
+  render(ui, { wrapper: Provider, ThemeProvider, ...options });
+
+// re-export everything
+export * from "@testing-library/react";
+
+// override render method
+export { customRender as render };

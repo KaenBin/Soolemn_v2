@@ -1,74 +1,74 @@
-import { addDoc, collection, onSnapshot } from "firebase/firestore";
-import { getFunctions, httpsCallable } from "firebase/functions";
+// import { addDoc, collection, onSnapshot } from "firebase/firestore";
+// import { getFunctions, httpsCallable } from "firebase/functions";
 
-import { auth, db } from "./firebase";
-import { loadStripe } from "@stripe/stripe-js";
+// import { auth, db } from "./firebase";
+// import { loadStripe } from "@stripe/stripe-js";
 
-export const stripePromise = loadStripe(
-  "pk_test_51P4emDIcJNDJCIe2VsWxjUWIhA5Q2sGY0Tb0aQuOdl62eYeWdVHTSE2XTGlqZ2jJV8TA17Q72tBKNlWoRElfHu7c00K3XUOt3C"
-);
+// export const stripePromise = loadStripe(
+//   "pk_test_51P4emDIcJNDJCIe2VsWxjUWIhA5Q2sGY0Tb0aQuOdl62eYeWdVHTSE2XTGlqZ2jJV8TA17Q72tBKNlWoRElfHu7c00K3XUOt3C"
+// );
 
-export const getCheckoutUrl = async (app, priceId) => {
-  // pay subcription
-  const userId = auth.currentUser?.uid;
-  if (!userId) throw new Error("User is not authenticated");
+// export const getCheckoutUrl = async (app, priceId) => {
+//   // pay subcription
+//   const userId = auth.currentUser?.uid;
+//   if (!userId) throw new Error("User is not authenticated");
 
-  const checkoutSessionRef = collection(
-    db,
-    "customers",
-    userId,
-    "checkout_sessions"
-  );
+//   const checkoutSessionRef = collection(
+//     db,
+//     "customers",
+//     userId,
+//     "checkout_sessions"
+//   );
 
-  const docRef = await addDoc(checkoutSessionRef, {
-    mode: "payment",
-    price: "price_1P7YYQIcJNDJCIe2ZVb3P06d",
-    success_url: window.location.origin,
-    cancel_url: window.location.origin,
-  });
+//   const docRef = await addDoc(checkoutSessionRef, {
+//     mode: "payment",
+//     price: "price_1P7YYQIcJNDJCIe2ZVb3P06d",
+//     success_url: window.location.origin,
+//     cancel_url: window.location.origin,
+//   });
 
-  return new Promise((resolve, reject) => {
-    const unsubscribe = onSnapshot(docRef, (snap) => {
-      const { error, url } = snap.data();
-      if (error) {
-        unsubscribe();
-        reject(new Error(`An error occurred: ${error.message}`));
-      }
-      if (url) {
-        console.log("Stripe Checkout URL:", url);
-        unsubscribe();
-        resolve(url);
-      }
-    });
-  });
-};
+//   return new Promise((resolve, reject) => {
+//     const unsubscribe = onSnapshot(docRef, (snap) => {
+//       const { error, url } = snap.data();
+//       if (error) {
+//         unsubscribe();
+//         reject(new Error(`An error occurred: ${error.message}`));
+//       }
+//       if (url) {
+//         console.log("Stripe Checkout URL:", url);
+//         unsubscribe();
+//         resolve(url);
+//       }
+//     });
+//   });
+// };
 
-export const getPortalUrl = async (app) => {
-  const user = auth.currentUser;
+// export const getPortalUrl = async (app) => {
+//   const user = auth.currentUser;
 
-  let dataWithUrl;
-  try {
-    const functions = getFunctions(app, "asia-southeast2");
-    const functionRef = httpsCallable(
-      functions,
-      "ext-firestore-stripe-payments-createPortalLink"
-    );
-    const { data } = await functionRef({
-      customerId: user?.uid,
-      returnUrl: window.location.origin,
-    });
+//   let dataWithUrl;
+//   try {
+//     const functions = getFunctions(app, "asia-southeast2");
+//     const functionRef = httpsCallable(
+//       functions,
+//       "ext-firestore-stripe-payments-createPortalLink"
+//     );
+//     const { data } = await functionRef({
+//       customerId: user?.uid,
+//       returnUrl: window.location.origin,
+//     });
 
-    dataWithUrl = data;
-    console.log("Reroute to Stripe portal: ", dataWithUrl.url);
-  } catch (error) {
-    console.error(error);
-  }
+//     dataWithUrl = data;
+//     console.log("Reroute to Stripe portal: ", dataWithUrl.url);
+//   } catch (error) {
+//     console.error(error);
+//   }
 
-  return new Promise((resolve, reject) => {
-    if (dataWithUrl.url) {
-      resolve(dataWithUrl.url);
-    } else {
-      reject(new Error("No url returned"));
-    }
-  });
-};
+//   return new Promise((resolve, reject) => {
+//     if (dataWithUrl.url) {
+//       resolve(dataWithUrl.url);
+//     } else {
+//       reject(new Error("No url returned"));
+//     }
+//   });
+// };
