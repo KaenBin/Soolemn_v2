@@ -18,17 +18,26 @@ import mock_categories from "@/mockdata/categories";
 import { Sort, Price, Category } from "@/constants/filters";
 import { listFilter } from "@/utils/utils";
 import { useEffect } from "react";
+import Error from "../../../pages/error";
 
 const ProductGroup2 = (props) => {
   const [page, setPage] = React.useState(0);
   const [category, setCategory] = React.useState([]);
-  const [minPrice, setMinPrice] = React.useState();
-  const [maxPrice, setMaxPrice] = React.useState();
+  const [minPrice, setMinPrice] = React.useState(Price[0].value);
+  const [maxPrice, setMaxPrice] = React.useState(Price[Price.length - 1].value);
   const [sort, setSort] = React.useState(Sort[0].value);
+  const [filtered, setFiltered] = React.useState(props.list);
+  const [error, setError] = React.useState(false);
 
   useEffect(() => {
     setPage(props.list.length ? 1 : 0);
   }, [props.list]);
+
+  useEffect(() => {
+    setFiltered(listFilter(props.list, category, minPrice, maxPrice));
+    setError(!listFilter(props.list, category, minPrice, maxPrice).length);
+  }, [props.list, category, minPrice, maxPrice, sort]);
+
   return (
     <Box width="90vw">
       <Grid
@@ -64,6 +73,7 @@ const ProductGroup2 = (props) => {
             alignItems="center"
           >
             <FreeSoloFilter
+              id="min-price"
               value={minPrice}
               setValue={setMinPrice}
               type="$ MINIMUM"
@@ -71,6 +81,7 @@ const ProductGroup2 = (props) => {
             />
             <ArrowBackIosNewIcon height="100%" />
             <FreeSoloFilter
+              id="max-price"
               value={maxPrice}
               setValue={setMaxPrice}
               type="$ MAXIMUM"
@@ -87,14 +98,13 @@ const ProductGroup2 = (props) => {
           </Grid>
         </Grid>
         <Grid display="flex" justifyContent="center">
-          <ProductList
-            list={listFilter(props.list, category, minPrice, maxPrice).slice(
-              0,
-              (page - 1) * 20 + 20
-            )}
-          />
+          {error ? (
+            <Error title="product" />
+          ) : (
+            <ProductList list={filtered.slice(0, (page - 1) * 20 + 20)} />
+          )}
         </Grid>
-        {page * 20 < props.list.length ? (
+        {page * 20 < filtered.length ? (
           <Grid>
             <Button
               onClick={() => setPage(page + 1)}

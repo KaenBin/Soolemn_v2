@@ -23,3 +23,5 @@ export { default as OrderDetails } from "./order";
 export { default as CheckOutDetails } from "./cart/CheckoutDetails";
 export { default as Checkout } from "./checkout";
 // export { default as AddProductForm } from "./CRUD/AddProduct";
+
+export { default as Error } from "./error";

@@ -8,7 +8,7 @@ const CustomerRouter = () => {
   return (
     <>
       <Routes>
-        <Route exact path="/" element={<Navigate to="/home" replace />} />
+        <Route exact path="/signin" element={<Navigate to="/home" replace />} />
         <Route path={ROUTES.HOME} Component={page.Home} />
         <Route path={ROUTES.PRODUCTS} Component={page.Products} />
         <Route path={ROUTES.DISCOUNTED_PRODUCTS} Component={page.Discounted} />

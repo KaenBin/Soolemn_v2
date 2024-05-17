@@ -24,6 +24,13 @@ export const getListName = (list) => {
   return output;
 };
 
+export const searchFilter = (list, search = "") => {
+  if (search === "") return list;
+  return list.filter((item) =>
+    item.name.toLowerCase().includes(search.toLowerCase())
+  );
+};
+
 export const listFilter = (
   list,
   category = [],
@@ -31,6 +38,7 @@ export const listFilter = (
   maxPrice = "Highest",
   search = ""
 ) => {
+  console.log(list);
   if (list.length === 0) return list;
 
   let filtered = list.filter((item) =>
@@ -38,14 +46,18 @@ export const listFilter = (
   );
   if (category.length) {
     filtered = filtered.filter((item) =>
-      category.every((obj) => item.category.includes(obj.value))
+      category.every((obj) => item.metadata?.category?.includes(obj.value))
     );
   }
   if (minPrice !== "") {
-    filtered = filtered.filter((item) => item.price >= parseInt(minPrice));
+    filtered = filtered.filter(
+      (item) => item.metadata?.price >= parseInt(minPrice)
+    );
   }
   if (maxPrice !== "Highest" && maxPrice !== "") {
-    filtered = filtered.filter((item) => item.price <= parseInt(maxPrice));
+    filtered = filtered.filter(
+      (item) => item.metadata?.price <= parseInt(maxPrice)
+    );
   }
 
   return filtered;

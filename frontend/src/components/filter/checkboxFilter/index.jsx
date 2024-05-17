@@ -14,7 +14,7 @@ const CheckboxFilter = (props) => {
       multiple
       limitTags={3}
       size="small"
-      id="checkboxes-tags-demo"
+      id="category-checkboxes"
       value={props.value}
       onChange={(event, newValue) => {
         props.setValue(newValue);
@@ -22,8 +22,8 @@ const CheckboxFilter = (props) => {
       options={props.list}
       disableCloseOnSelect
       getOptionLabel={(option) => option.value}
-      renderOption={(props, option, { selected }) => (
-        <li {...props}>
+      renderOption={({ key, ...props }, option, { selected }) => (
+        <li id="category-checkbox" key={key} {...props}>
           <Checkbox
             icon={icon}
             checkedIcon={checkedIcon}

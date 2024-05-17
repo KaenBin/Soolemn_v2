@@ -26,10 +26,11 @@ const ProductContainer = (props) => {
 
   return (
     <Card
+      id={"product-" + props.idx}
       key={props.idx}
       sx={{
-        width: props.size == "small" ? 130 : 260,
-        height: props.size == "small" ? 205 : 410,
+        width: 260,
+        height: 410,
         marginRight: "auto",
         marginLeft: "auto",
         boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.4)",
@@ -66,11 +67,22 @@ const ProductContainer = (props) => {
             icon={<StarIcon fontSize="inherit" />}
             emptyIcon={<StarBorderIcon fontSize="inherit" />}
           />{" "}
-          <Typography noWrap gutterBottom variant="price1" maxWidth="205">
+          <Typography
+            id="product-name"
+            noWrap
+            gutterBottom
+            variant="price1"
+            maxWidth="205"
+          >
             {props.item.name}
           </Typography>
-          <Typography display="inline" variant="price1">
-            ${(props.item.price / 2).toFixed(2)}
+          <Typography
+            id={"discount-price-" + props.idx}
+            display="inline"
+            variant="price1"
+          >
+            {/* ${(props.item.price / 2).toFixed(2)} */}
+            {props.item?.stripe_metadata_price || 0}
           </Typography>{" "}
           {true ? (
             <Typography
@@ -78,7 +90,8 @@ const ProductContainer = (props) => {
               style={{ textDecorationLine: "line-through" }}
               variant="price2"
             >
-              ${props.item.price.toFixed(2)}
+              {/* ${props.item.price.toFixed(2)} */}
+              {props.item?.stripe_metadata_price || 0}
             </Typography>
           ) : (
             <></>

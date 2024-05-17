@@ -22,7 +22,7 @@ export default function Home() {
 
   return (
     <main className="content">
-      <div className="home">
+      <div id="home" className="home">
         <Grid container minHeight={160} direction="column" spacing={5}>
           <Grid
             marginTop={5}

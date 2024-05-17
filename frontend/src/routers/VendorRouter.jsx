@@ -30,7 +30,7 @@ const VendorRouter = () => {
         <Routes>
           <Route
             exact
-            path="/*"
+            path="/signin"
             element={<Navigate to="/dashboard" replace />}
           />
           <Route path={ROUTES.DASHBOARD} Component={page.DashBoard} />

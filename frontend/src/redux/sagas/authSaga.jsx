@@ -135,8 +135,8 @@ function* authSaga({ type, payload }) {
         //   yield put(resetFilter());
         //   yield put(resetCheckout());
         yield put(signOutSuccess());
-        History.navigate("/");
         yield put(setAuthenticating(false));
+        History.navigate("/");
       } catch (e) {
         handleError(e);
       }

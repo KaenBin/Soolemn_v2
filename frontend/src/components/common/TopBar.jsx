@@ -95,7 +95,7 @@ export default function TopBar() {
   const profile = useSelector((state) => state.profile);
   const isMenuOpen = Boolean(anchorEl);
   const menuId = "primary-search-account-menu";
-
+  const [searchQuery, setSearchQuery] = React.useState("");
   const currentUser = apiInstance.getCurrentUser();
   const [userData, setUserData] = React.useState([]);
   // const [cartLength, setCartLength] = React.useState(0);
@@ -114,6 +114,11 @@ export default function TopBar() {
 
   const handlePopoverClose = () => {
     setAnchorEL(null);
+  };
+
+  const handleSearchSubmit = (e) => {
+    if (e.key === "Enter")
+      History.navigate("/products", { state: { searchQuery } });
   };
 
   const open = Boolean(anchorEL);
@@ -154,6 +159,7 @@ export default function TopBar() {
       </MenuItem>
     </Menu>
   );
+
   React.useEffect(() => {
     apiInstance
       .loadImage("gs://soolemn-cc5b9.appspot.com/defaultAvatar.jpg")
@@ -164,6 +170,7 @@ export default function TopBar() {
         console.log(error);
       });
   }, []);
+
   React.useEffect(() => {
     const getUserData = async () => {
       try {
@@ -216,7 +223,11 @@ export default function TopBar() {
               <NavLink className="navigation" to={ROUTE.HOME}>
                 Home
               </NavLink>
-              <NavLink className="navigation" to={ROUTE.PRODUCTS}>
+              <NavLink
+                id="products-page"
+                className="navigation"
+                to={ROUTE.PRODUCTS}
+              >
                 Product
               </NavLink>
             </Stack>
@@ -225,7 +236,11 @@ export default function TopBar() {
                 <SearchIcon />
               </SearchIconWrapper>
               <StyledInputBase
+                id="search"
                 placeholder="Search…"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleSearchSubmit}
                 inputProps={{ "aria-label": "search" }}
               />
             </Search>

@@ -222,6 +222,7 @@ function CartSummary(prop) {
             }}
           >
             <Button
+              id="checkout-button"
               variant="contained"
               sx={{
                 width: "100%",

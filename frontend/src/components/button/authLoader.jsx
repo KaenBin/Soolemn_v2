@@ -6,6 +6,7 @@ import { setAuthStatus, setAuthenticating } from "@/redux/actions/miscActions";
 const AuthenticatingLoader = ({ authStatus, title }) => {
   return authStatus?.success ? (
     <Button
+      id="authenticated"
       className="authenticated"
       fullWidth
       variant="contained"
@@ -15,7 +16,13 @@ const AuthenticatingLoader = ({ authStatus, title }) => {
       {authStatus.message}
     </Button>
   ) : (
-    <Button className="authenticating" variant="contained" fullWidth disabled>
+    <Button
+      id="authenticating"
+      className="authenticating"
+      variant="contained"
+      fullWidth
+      disabled
+    >
       <span />
       <span />
       <span />
@@ -35,6 +42,7 @@ const AuthLoader = ({ authStatus, title }) => {
 
   return authStatus && !authStatus.success ? (
     <Button
+      id="error"
       onClick={handleResetAuth}
       className="error"
       fullWidth
@@ -45,6 +53,7 @@ const AuthLoader = ({ authStatus, title }) => {
     </Button>
   ) : (
     <Button
+      id="signin"
       type="submit"
       className="submit"
       fullWidth

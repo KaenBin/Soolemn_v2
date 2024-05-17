@@ -12,7 +12,7 @@ export default function FreeSoloFilter(props) {
     <Autocomplete
       freeSolo
       size="small"
-      id="free-solo"
+      id={props.id}
       disableClearable
       options={props.list.map((option) => option.value)}
       value={props.value}

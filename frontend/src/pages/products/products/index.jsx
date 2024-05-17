@@ -7,9 +7,13 @@ import { setAuthenticating } from "@/redux/actions/miscActions";
 import { ProductGroup, ProductGroup2 } from "@/components/product";
 import mock_product from "@/mockdata/products";
 import apiInstance from "@/services/apiService";
+import { useLocation } from "react-router-dom";
+import { searchFilter } from "@/utils/utils";
 
 export default function ProductOverview(props) {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const { searchQuery } = location.state || {};
   const products = useSelector((state) => state.products);
 
   useEffect(
@@ -32,7 +36,7 @@ export default function ProductOverview(props) {
         >
           <ProductGroup2
             title="Exclusive deal"
-            list={products.items}
+            list={searchFilter(products.items, searchQuery) || products.items}
             block={15}
           />
         </Grid>
