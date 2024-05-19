@@ -60,8 +60,7 @@ async function getImageDownloadUrl(filePath) {
 
     // Get the download URL
     const downloadUrl = await getDownloadURL(fileRef);
-    console.log(downloadUrl);
-    // return downloadUrl;
+    return downloadUrl;
   } catch (error) {
     console.error("Error getting download URL:", error);
     throw error;
@@ -79,29 +78,24 @@ async function uploadImage(file, quantity) {
         contentType: file.mimetype,
       };
 
-      bucket
-        .upload(file.buffer, { destination: fileName, metadata })
-        .then(function (data) {
-          console.log(data);
-          const file = data[0];
-        });
+      bucket.upload(file.buffer, { destination: fileName, metadata });
     }
-    // if (quantity === "multiple") {
-    //   for (let i = 0; i < file.images.length; i++) {
-    //     const dateTime = Date.now();
-    //     const fileName = `images/${dateTime}`;
-    //     const storageRef = ref(storage, fileName);
-    //     const metadata = {
-    //       contentType: file.images[i].mimetype,
-    //     };
+    if (quantity === "multiple") {
+      for (const element of file.images) {
+        const dateTime = Date.now();
+        const fileName = `images/${dateTime}`;
+        const storageRef = ref(storage, fileName);
+        const metadata = {
+          contentType: element.mimetype,
+        };
 
-    //     const saveImage = await Image.create({ imageUrl: fileName });
-    //     file.item.imageId.push({ _id: saveImage._id });
-    //     await file.item.save();
+        const saveImage = await Image.create({ imageUrl: fileName });
+        file.item.imageId.push({ _id: saveImage._id });
+        await file.item.save();
 
-    //     await uploadBytesResumable(storageRef, file.images[i].buffer, metadata);
-    //   }
-    // }
+        await uploadBytesResumable(storageRef, element.buffer, metadata);
+      }
+    }
   } catch (err) {
     console.log(err);
   }

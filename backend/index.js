@@ -31,6 +31,7 @@ const corsOptions = {
     "http://localhost:3000",
     "https://soolemn-ui-2.onrender.com",
     "https://soolemn-fe.onrender.com",
+    "https://soolemn-ui-v2.onrender.com",
   ],
 };
 

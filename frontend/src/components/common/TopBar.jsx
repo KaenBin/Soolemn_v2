@@ -205,10 +205,10 @@ export default function TopBar() {
             spacing={5}
           >
             <Typography
-              variant="h6"
+              variant="h5"
               noWrap
               component="div"
-              sx={{ display: { xs: "none", sm: "block" } }}
+              sx={{ display: { xs: "none", sm: "block" }, fontWeight: "500" }}
             >
               <Link to="/home" className="navigation">
                 Soolemn
@@ -220,13 +220,18 @@ export default function TopBar() {
               alignItems="center"
               justifyContent="center"
             >
-              <NavLink className="navigation" to={ROUTE.HOME}>
+              <NavLink
+                className="navigation"
+                to={ROUTE.HOME}
+                style={{ fontWeight: "500" }}
+              >
                 Home
               </NavLink>
               <NavLink
                 id="products-page"
                 className="navigation"
                 to={ROUTE.PRODUCTS}
+                style={{ fontWeight: "500" }}
               >
                 Product
               </NavLink>
@@ -261,7 +266,7 @@ export default function TopBar() {
                   <Avatar
                     id="my"
                     alt="Account"
-                    src={imageUrl}
+                    // src={imageUrl}
                     edge="end"
                     aria-label="account of current user"
                     aria-controls={menuId}

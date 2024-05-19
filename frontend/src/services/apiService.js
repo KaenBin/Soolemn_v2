@@ -32,7 +32,11 @@ class API {
       },
     };
     await axios
-      .post("http://localhost:4000/signup", { ...form, userId }, config)
+      .post(
+        "https://soolemn-service-v2.onrender.com/signup",
+        { ...form, userId },
+        config
+      )
       .catch((e) => console.log(e));
   };
 
@@ -64,7 +68,7 @@ class API {
 
     return await axios
       .get(
-        `http://localhost:4000/user/${id}`,
+        `https://soolemn-service-v2.onrender.com/user/${id}`,
         { params: { email: id } },
         config
       )
@@ -244,7 +248,7 @@ class API {
       },
     };
     return await axios
-      .get("http://localhost:4000/get-products", config)
+      .get("https://soolemn-service-v2.onrender.com/get-products", config)
       .then((res) => {
         return { products: res.data, total: res.data.length };
       })
@@ -266,7 +270,7 @@ class API {
 
     return await axios
       .post(
-        "http://localhost:4000/product/add",
+        "https://soolemn-service-v2.onrender.com/product/add",
         {
           ...data,
           vendorId: userId,
@@ -305,7 +309,7 @@ class API {
     };
     try {
       const response = await axios.post(
-        `http://localhost:4000/add_to_cart/${auth.currentUser?.uid}/${item.productId}`,
+        `https://soolemn-service-v2.onrender.com/add_to_cart/${auth.currentUser?.uid}/${item.productId}`,
         { quantity: item.quantity },
         config
       );
@@ -326,7 +330,7 @@ class API {
 
     try {
       const response = await axios.put(
-        `http://localhost:4000/update_cart/${auth.currentUser?.uid}/${productId}`,
+        `https://soolemn-service-v2.onrender.com/update_cart/${auth.currentUser?.uid}/${productId}`,
         { quantity },
         config
       );
@@ -347,7 +351,7 @@ class API {
 
     try {
       const response = await axios.delete(
-        `http://localhost:4000/delete_from_cart/${auth.currentUser?.uid}/${productId}`,
+        `https://soolemn-service-v2.onrender.com/delete_from_cart/${auth.currentUser?.uid}/${productId}`,
         config
       );
       return response.data;
@@ -367,7 +371,7 @@ class API {
 
     try {
       const response = await axios.delete(
-        `http://localhost:4000/delete_all_cart/${auth.currentUser?.uid}`,
+        `https://soolemn-service-v2.onrender.com/delete_all_cart/${auth.currentUser?.uid}`,
         config
       );
       return response.data;
@@ -395,7 +399,7 @@ class API {
 
     try {
       const response = await axios.post(
-        `http://localhost:4000/payment/checkout/${userId}/${productId}`,
+        `https://soolemn-service-v2.onrender.com/payment/checkout/${userId}/${productId}`,
         {
           quantity,
           base_url: window.location.origin,
@@ -423,7 +427,7 @@ class API {
 
     try {
       const response = await axios.post(
-        `http://localhost:4000/payment/checkout/${userId}`,
+        `https://soolemn-service-v2.onrender.com/payment/checkout/${userId}`,
         {
           data,
           base_url: window.location.origin,
@@ -450,7 +454,7 @@ class API {
 
     try {
       const response = await axios.get(
-        `http://localhost:4000/order/get-orders/${userId}/${orderId}`,
+        `https://soolemn-service-v2.onrender.com/order/get-orders/${userId}/${orderId}`,
         config
       );
       return response;
@@ -473,7 +477,7 @@ class API {
 
     try {
       const response = await axios.get(
-        `http://localhost:4000/order/get-orders/${userId}`,
+        `https://soolemn-service-v2.onrender.com/order/get-orders/${userId}`,
         config
       );
       return response;
@@ -650,7 +654,7 @@ class API {
     console.log(cart);
     try {
       const response = await axios.post(
-        `http://localhost:4000/create-payment-intent`,
+        `https://soolemn-service-v2.onrender.com/create-payment-intent`,
         {
           price: cart
             .map((product) => product.price * product.quantity)
