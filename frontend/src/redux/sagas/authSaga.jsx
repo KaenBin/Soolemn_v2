@@ -163,13 +163,9 @@ function* authSaga({ type, payload }) {
     case ON_AUTHSTATE_SUCCESS: {
       yield initRequest();
       const user = yield call(apiInstance.getUser, payload.uid);
-      console.log("profile fetch success");
       yield put(setProfile(user));
-      console.log("profile success");
       yield put(setInitialLoad(user.cart));
-      console.log("cart success");
       yield put(getProducts());
-      console.log("products success");
       yield put(
         signInSuccess({
           id: payload.uid,

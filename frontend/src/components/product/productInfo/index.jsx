@@ -25,7 +25,6 @@ import {
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
-import SwipeableViews from "react-swipeable-views";
 import { Link, useParams } from "react-router-dom";
 import Grid from "@mui/material/Unstable_Grid2";
 import { tableCellClasses } from "@mui/material/TableCell";

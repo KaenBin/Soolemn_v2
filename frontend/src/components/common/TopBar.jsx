@@ -25,7 +25,6 @@ import LocalMallOutlinedIcon from "@mui/icons-material/LocalMallOutlined";
 import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
 import { useDispatch, useSelector } from "react-redux";
 import Popover from "@mui/material/Popover";
-import { makeStyles } from "@mui/styles";
 
 import { signOut } from "@/redux/actions/authActions";
 import * as ROUTE from "@/constants/routes";
@@ -76,22 +75,12 @@ const badgeStyle = {
   },
 };
 
-const useStyles = makeStyles((theme) => ({
-  popover: {
-    padding: theme.spacing(2),
-    marginRight: theme.spacing(2),
-    marginLeft: theme.spacing(2),
-    borderRadius: 20,
-  },
-}));
-
 export default function TopBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorEL, setAnchorEL] = React.useState(null);
   const dispatch = useDispatch();
   const [avatar, setAvatar] = React.useState();
   const [imageUrl, setImageUrl] = React.useState();
-  const classes = useStyles();
   const profile = useSelector((state) => state.profile);
   const isMenuOpen = Boolean(anchorEl);
   const menuId = "primary-search-account-menu";
@@ -307,8 +296,13 @@ export default function TopBar() {
                     disableScrollLock
                     disableRestoreFocus
                   >
-                    <Box className={classes.popover}>
-                      <Divider>Wallet</Divider>
+                    <Box
+                      sx={{
+                        padding: 2,
+                        borderRadius: 20,
+                      }}
+                    >
+                      <Divider sx={{ width: "80px" }}>Wallet</Divider>
                       <Typography pt={1}>Balance: ${profile.wallet}</Typography>
                     </Box>
                   </Popover>

@@ -2,12 +2,8 @@ import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import { makeStyles } from "@mui/styles";
-import { IconButton } from "@mui/material";
 
 export default function FreeSoloFilter(props) {
-  const classes = useStyles();
-
   return (
     <Autocomplete
       freeSolo
@@ -30,7 +26,20 @@ export default function FreeSoloFilter(props) {
           InputProps={{
             ...params.InputProps,
             classes: {
-              root: classes.inputRoot,
+              root: {
+                "& .MuiOutlinedInput-notchedOutline": {
+                  border: "none",
+                  borderBottom: "solid",
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  border: "none",
+                  borderBottom: "solid",
+                },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  border: "none",
+                  borderBottom: "solid",
+                },
+              },
             },
             type: "input",
           }}
@@ -40,20 +49,3 @@ export default function FreeSoloFilter(props) {
     />
   );
 }
-
-const useStyles = makeStyles({
-  inputRoot: {
-    "& .MuiOutlinedInput-notchedOutline": {
-      border: "none",
-      borderBottom: "solid",
-    },
-    "&:hover .MuiOutlinedInput-notchedOutline": {
-      border: "none",
-      borderBottom: "solid",
-    },
-    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-      border: "none",
-      borderBottom: "solid",
-    },
-  },
-});

@@ -2,8 +2,20 @@ import * as React from "react";
 import { useTheme } from "@mui/material/styles";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import SwipeableViews from "react-swipeable-views";
-import { autoPlay } from "react-swipeable-views-utils";
+import {
+  Navigation,
+  Pagination,
+  Scrollbar,
+  A11y,
+  Autoplay,
+} from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { useSwiper } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
+import "swiper/css/autoplay";
 import {
   MobileStepper,
   Button,
@@ -14,8 +26,6 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import SwipeableCarousel from "./SwipeableCarousel";
-
-const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 // const images = [
 //   {
@@ -44,13 +54,16 @@ const CustomCarousel = (props) => {
   const theme = useTheme();
   const [activeStep, setActiveStep] = React.useState(0);
   const maxSteps = props.item.images ? props.item.images.length : 0;
+  const swiper = useSwiper();
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    swiper.slideNext();
   };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    swiper.slidePrev();
   };
 
   const handleStepChange = (step) => {
@@ -104,36 +117,32 @@ const CustomCarousel = (props) => {
           </IconButton>
         </Grid>
       </Grid>
-      <AutoPlaySwipeableViews
-        axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-        index={activeStep}
-        onChangeIndex={handleStepChange}
-        enableMouseEvents
+      <Swiper
+        // install Swiper modules
+        modules={[Navigation, Pagination, A11y, Autoplay]}
+        spaceBetween={50}
+        slidesPerView={1}
+        autoplay
+        navigation
+        pagination={{ clickable: true }}
+        onSwiper={(swiper) => console.log(swiper)}
+        onSlideChange={() => console.log("slide change")}
       >
-        {props.item.images ? (
-          props.item.images.map((step, index) => (
-            <div key={step}>
-              {Math.abs(activeStep - index) <= 2 ? (
-                <Box
-                  component="img"
-                  sx={{
-                    height: "55vh",
-                    display: "block",
-                    maxWidth: 400,
-                    overflow: "hidden",
-                    width: "100%",
-                    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.4)",
-                  }}
-                  src={step}
-                  alt={"Image " + index}
-                />
-              ) : null}
-            </div>
-          ))
-        ) : (
-          <></>
-        )}
-      </AutoPlaySwipeableViews>
+        {props.item.images?.map((step, index) => (
+          <SwiperSlide key={index}>
+            <Box
+              component="img"
+              sx={{
+                width: "100%",
+                height: "55vh",
+              }}
+              src={step}
+              // alt={step.label}
+            />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+
       <SwipeableCarousel
         images={props.item.images ? props.item.images : null}
         activeStep={activeStep}
