@@ -27,9 +27,9 @@ export default function Checkout() {
   //         });
   //   }, [stripe]);
   const paymentIntent = {
-    id: 123,
-    created: 1700000,
-    amount: 170000,
+    id: "pi_3PFqidIcJNDJCIe200IMNWEO",
+    created: Date.now(),
+    amount: 20000,
     payment_method_types: ["card"],
   };
   return (
@@ -154,9 +154,7 @@ export default function Checkout() {
                             variant="body1"
                             gutterBottom
                           >
-                            {new Date(
-                              paymentIntent?.created * 1000
-                            ).toUTCString()}
+                            {new Date(paymentIntent?.created).toUTCString()}
                           </Typography>
                         </Grid2>
                       </Grid2>

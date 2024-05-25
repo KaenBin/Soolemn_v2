@@ -45,7 +45,7 @@ const ProductContainer = (props) => {
           image={props.item.images[0] ? props.item.images[0] : img}
           alt="the image of a product"
         />
-        {props.size != "small" && <Typography variant="status">NEW</Typography>}
+        {/* {props.size != "small" && <Typography variant="status">NEW</Typography>}
         {props.size != "small" && (
           <Typography
             style={{
@@ -57,7 +57,7 @@ const ProductContainer = (props) => {
           >
             -50%
           </Typography>
-        )}
+        )} */}
         <CardContent>
           <StyledRating
             name="customized-color"
@@ -82,7 +82,10 @@ const ProductContainer = (props) => {
             variant="price1"
           >
             {/* ${(props.item.price / 2).toFixed(2)} */}
-            {props.item?.stripe_metadata_price || 0}
+            {Number(props.item?.stripe_metadata_price).toLocaleString(
+              "en-US"
+            ) || 0}{" "}
+            VND
           </Typography>{" "}
           {true ? (
             <Typography
@@ -90,8 +93,10 @@ const ProductContainer = (props) => {
               style={{ textDecorationLine: "line-through" }}
               variant="price2"
             >
-              {/* ${props.item.price.toFixed(2)} */}
-              {props.item?.stripe_metadata_price || 0}
+              {Number(props.item?.stripe_metadata_price).toLocaleString(
+                "en-US"
+              ) || 0}{" "}
+              VND{" "}
             </Typography>
           ) : (
             <></>

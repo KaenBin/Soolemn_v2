@@ -70,7 +70,7 @@ const ProductDescription = (props) => {
           variant="price3"
           m="10px"
         >
-          {(props.item?.metadata?.price / 2).toLocaleString("en-US") +
+          {Number(props.item?.metadata?.price).toLocaleString("en-US") +
             " " +
             props.item?.metadata?.currency.toUpperCase()}
         </Typography>{" "}
@@ -130,9 +130,9 @@ const ProductDescription = (props) => {
             {expanded ? "Show Less" : "Show More"}
           </Button>
         )}
-        <Typography variant="description" m="5px">
+        {/* <Typography variant="description" m="5px">
           Similar Product:
-        </Typography>
+        </Typography> */}
         {/* <SimilarProducts list={products.items} block={3} /> */}
       </Stack>
     </Box>

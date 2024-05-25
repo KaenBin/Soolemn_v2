@@ -9,7 +9,7 @@ export default function OrderProduct(props) {
   console.log(items, props);
   return (
     <Grid2 width="40vw">
-      {items.map((item) => (
+      {items.map((item, index) => (
         <Box
           key={item.id}
           sx={{
@@ -26,8 +26,8 @@ export default function OrderProduct(props) {
               <img
                 src={item.images[0]}
                 alt={item.name}
-                width="100px"
-                height="100px"
+                width="90px"
+                height="110px"
               />
             </Grid2>
             <Grid2
@@ -47,14 +47,36 @@ export default function OrderProduct(props) {
                 </Typography>
               </Grid2>
               <Grid2>
-                <Typography>x3</Typography>
+                <Typography>x{props.items[index].quantity}</Typography>
               </Grid2>
               <Grid2>
-                <Typography>[On sale - Shipping]</Typography>
+                <Typography>[On sale - Freeship]</Typography>
               </Grid2>
             </Grid2>
-            <Grid2 xs={4}>
-              <Typography>Delivery Status</Typography>
+            <Grid2
+              xs={4}
+              display="flex"
+              justifyContent="start"
+              alignItems="end"
+            >
+              <Typography sx={{ fontSize: "13px" }}>
+                Delivery Status:
+              </Typography>
+              {item.stripe_metadata_status ? (
+                <Typography
+                  color="#4caf50"
+                  sx={{ fontSize: "15px", marginLeft: "10px" }}
+                >
+                  {item.stripe_metadata_status}
+                </Typography>
+              ) : (
+                <Typography
+                  color="#6495ED"
+                  sx={{ fontSize: "15px", marginLeft: "10px" }}
+                >
+                  Pending
+                </Typography>
+              )}
             </Grid2>
           </Grid2>
           <Typography
@@ -75,7 +97,8 @@ export default function OrderProduct(props) {
       ))}
       <Divider style={{ margin: "10px" }} />
       <Typography style={{ margin: "10px" }}>
-        Total: 3 items - Total price:
+        Total: {props.items.length} items - Total price:{" "}
+        {Number(props.order.amount).toLocaleString("en-US")} VND
       </Typography>
       <Box
         sx={{
@@ -86,10 +109,18 @@ export default function OrderProduct(props) {
           margin: "10px",
         }}
       >
-        <Typography sx={{ textAlign: "center" }}>
-          Expected Delivery Data: 170000
+        <Typography
+          sx={{ textAlign: "center", display: "flex", flexDirection: "row" }}
+        >
+          Expected Delivery Data:
+          <div style={{ color: "red", marginLeft: "10px" }}>
+            {new Date(props.order.created + 604800).toUTCString("en-US")}
+          </div>
         </Typography>
-        <Typography variant="price2" sx={{ textAlign: "center" }}>
+        <Typography
+          variant="price2"
+          sx={{ textAlign: "left", marginRight: "10px" }}
+        >
           Delivered by: ViettelPost
         </Typography>
       </Box>

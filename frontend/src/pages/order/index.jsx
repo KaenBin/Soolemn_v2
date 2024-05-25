@@ -78,7 +78,7 @@ export default function OrderDetails(props) {
           columnSpacing={5}
         >
           <Grid>
-            <OrderProduct items={order.items} />
+            <OrderProduct items={order.items} order={order} />
           </Grid>
           <Grid>
             <OrderMap address={order.charges.data[0].billing_details.address} />

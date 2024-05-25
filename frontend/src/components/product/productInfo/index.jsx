@@ -166,10 +166,9 @@ const ProductInfo = (props) => {
 
         <Typography variant="price3" component="h1" fontWeight={500} m={3}>
           Total:{" "}
-          {(
-            10000 +
-            (props.item?.metadata?.price / 2) * quantity
-          ).toLocaleString("en-US") +
+          {(10000 + props.item?.metadata?.price * quantity).toLocaleString(
+            "en-US"
+          ) +
             " " +
             props.item?.metadata?.currency?.toUpperCase()}
         </Typography>
