@@ -82,9 +82,9 @@ const ProductContainer = (props) => {
             variant="price1"
           >
             {/* ${(props.item.price / 2).toFixed(2)} */}
-            {Number(props.item?.stripe_metadata_price).toLocaleString(
+            {Number(props.item?.stripe_metadata_price || 0).toLocaleString(
               "en-US"
-            ) || 0}{" "}
+            )}{" "}
             VND
           </Typography>{" "}
           {true ? (
@@ -93,7 +93,7 @@ const ProductContainer = (props) => {
               style={{ textDecorationLine: "line-through" }}
               variant="price2"
             >
-              {Number(props.item?.stripe_metadata_price).toLocaleString(
+              {Number(props.item?.stripe_metadata_price || 0).toLocaleString(
                 "en-US"
               ) || 0}{" "}
               VND{" "}
