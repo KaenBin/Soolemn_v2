@@ -500,7 +500,7 @@ class API {
 
     try {
       const response = await axios.get(
-        "http://localhost:4000/order/get-all",
+        "https://soolemn-service-v2.onrender.com/order/get-all",
         config
       );
       return response.data;
@@ -523,7 +523,7 @@ class API {
     console.log(orderId, data);
     try {
       const response = await axios.post(
-        `http://localhost:4000/order/update/${orderId}`,
+        `https://soolemn-service-v2.onrender.com/order/update/${orderId}`,
         data,
         config
       );
