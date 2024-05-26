@@ -19,8 +19,9 @@ const {
   createStripeCheckout,
   createPaymentIntent,
 } = require("./services/payment");
-const { getOrderByCustomer } = require("./services/order");
+const { getOrderByCustomer, updateOrderByID } = require("./services/order");
 const { getAllShipments, createShipment } = require("./services/shipping");
+const { stripe } = require("./services/configuration");
 
 const port = 4000;
 
@@ -217,6 +218,26 @@ app.get("/order/get-orders/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
     const response = await getOrderByCustomer(userId);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/order/get-all", async (req, res) => {
+  try {
+    const response = await stripe.paymentIntents.list();
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post("/order/update/:orderId", async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    console.log(orderId, req.body);
+    const response = await updateOrderByID(orderId, req.body);
     res.send(response);
   } catch (error) {
     res.status(500).json({ error: error.message });

@@ -1,4 +1,4 @@
-const { db, functions } = require("../configuration");
+const { db, functions, stripe } = require("../configuration");
 
 exports.stripeWebhook = functions.https.onRequest(async (req, res) => {
   const stripe = require("stripe")(functions.config().stripe.token);
@@ -44,4 +44,8 @@ const getOrderByCustomer = async (userId) => {
   return data;
 };
 
-module.exports = { getOrderByCustomer };
+const updateOrderByID = async (orderId, data) => {
+  return await stripe.paymentIntents.update(orderId, data);
+};
+
+module.exports = { getOrderByCustomer, updateOrderByID };

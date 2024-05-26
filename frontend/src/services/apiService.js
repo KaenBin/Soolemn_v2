@@ -436,7 +436,7 @@ class API {
       );
       window.location.replace(response.data.url);
     } catch (error) {
-      console.error("Error paying product:", error);
+      console.error("Error creating checkout:", error);
       throw error;
     }
   };
@@ -459,7 +459,7 @@ class API {
       );
       return response;
     } catch (error) {
-      console.error("Error paying product:", error);
+      console.error("Error getting order:", error);
       throw error;
     }
   };
@@ -482,10 +482,58 @@ class API {
       );
       return response;
     } catch (error) {
-      console.error("Error paying product:", error);
+      console.error("Error getting orders:", error);
       throw error;
     }
   };
+
+  getAllOrders = async () => {
+    const userId = auth.currentUser?.uid;
+    if (!userId) throw new Error("User is not authenticated.");
+    console.log(userId);
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    };
+
+    try {
+      const response = await axios.get(
+        "http://localhost:4000/order/get-all",
+        config
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error getting all orders:", error);
+      throw error;
+    }
+  };
+
+  updateOrder = async (orderId, data) => {
+    const userId = auth.currentUser?.uid;
+    if (!userId) throw new Error("User is not authenticated.");
+    console.log(userId);
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    };
+    console.log(orderId, data);
+    try {
+      const response = await axios.post(
+        `http://localhost:4000/order/update/${orderId}`,
+        data,
+        config
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error updating order:", error);
+      throw error;
+    }
+  };
+
   // getProducts = (lastRefKey) => {
   //   let didTimeout = false;
 

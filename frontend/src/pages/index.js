@@ -19,6 +19,7 @@ export { default as UserManage } from "./user/userManage";
 
 export { default as OrderInfo } from "./account/OrderInfo";
 export { default as OrderDetails } from "./order";
+export { default as OrderManage } from "./order/orderManage";
 
 export { default as CheckOutDetails } from "./cart/CheckoutDetails";
 export { default as Checkout } from "./checkout";

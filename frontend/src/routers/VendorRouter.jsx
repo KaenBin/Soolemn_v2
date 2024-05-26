@@ -34,7 +34,7 @@ const VendorRouter = () => {
             element={<Navigate to="/dashboard" replace />}
           />
           <Route path={ROUTES.DASHBOARD} Component={page.DashBoard} />
-          <Route path={ROUTES.MANAGE_ORDERS} Component={page.ProductManage} />
+          <Route path={ROUTES.MANAGE_ORDERS} Component={page.OrderManage} />
           <Route path={ROUTES.MANAGE_PRODUCTS} Component={page.ProductManage} />
           <Route path={ROUTES.ADD_PRODUCTS} Component={page.AddProduct} />
           <Route

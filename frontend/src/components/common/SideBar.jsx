@@ -171,7 +171,14 @@ const SideBar = ({ selectedTab }) => {
             ))}
           </Box>
           <Divider />
-          <Button onClick={() => dispatch(signOut())}>Sign out</Button>
+          <Button
+            onClick={() => dispatch(signOut())}
+            variant="contained"
+            color="secondary"
+            sx={{ width: "100%", height: "40px" }}
+          >
+            Sign out
+          </Button>
         </Menu>
       </ProSidebar>
     </Box>
