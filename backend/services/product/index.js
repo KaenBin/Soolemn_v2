@@ -12,6 +12,8 @@ async function addProduct({
   price,
   currency,
   category,
+  subcategory,
+  group,
   stock,
   size,
   images = [],
@@ -28,14 +30,29 @@ async function addProduct({
       metadata: {
         vendorId,
         category,
+        subcategory,
+        group,
         price,
         currency,
         stock,
+        quantity: stock,
       },
       package_dimensions: size,
     })
     .then((data) => data)
     .catch((e) => e);
+}
+
+async function addProducts(data) {
+  try {
+    let result = [];
+    for (const element of data) {
+      result.push(await addProduct(element));
+    }
+    return result;
+  } catch (e) {
+    return e;
+  }
 }
 
 async function getProduct(id) {
@@ -77,8 +94,12 @@ async function uploadImage(file, quantity) {
       const metadata = {
         contentType: file.mimetype,
       };
-
-      bucket.upload(file.buffer, { destination: fileName, metadata });
+      console.log(file, fileName, metadata);
+      console.log(file.buffer.toString());
+      bucket.upload("" + file.originalname, {
+        destination: fileName,
+        metadata,
+      });
     }
     if (quantity === "multiple") {
       for (const element of file.images) {
@@ -101,10 +122,33 @@ async function uploadImage(file, quantity) {
   }
 }
 
+async function deleteAllProducts() {
+  const products = await getProducts();
+  console.log(
+    products.filter(
+      (product) =>
+        product.stripe_metadata_vendorId != "loitlttl1342002@gmail.com"
+    )
+  );
+  return products
+    .filter(
+      (product) =>
+        product.stripe_metadata_vendorId != "loitlttl1342002@gmail.com"
+    )
+    .map(async (product) => {
+      await stripe.products
+        .del(product.id)
+        .then((data) => data)
+        .catch((e) => console.log(e));
+    });
+}
+
 module.exports = {
   addProduct,
+  addProducts,
   getProduct,
   getProducts,
   getImageDownloadUrl,
   uploadImage,
+  deleteAllProducts,
 };

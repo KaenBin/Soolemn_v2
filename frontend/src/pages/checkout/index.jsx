@@ -1,14 +1,33 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Step, StepLabel, Stepper, Typography } from "@mui/material";
 import { useStripe } from "@stripe/react-stripe-js";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { useSelector } from "react-redux";
+import { logEvent } from "firebase/analytics";
+
 import { ColorlibStepIcon } from "../cart/StepperComp";
+import apiInstance from "@/services/apiService";
+import { analytics } from "@/services/firebase";
 
 export default function Checkout() {
   //   const dispatch = useDispatch();
-  const profile = useSelector((state) => state.profile);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [activeStep, setActiveStep] = React.useState(2);
+  console.log(orders);
+  useEffect(() => {
+    apiInstance
+      .getOrders()
+      .then((res) => {
+        setOrders(res.data);
+        setLoading(false);
+        logEvent(analytics, "purchase", res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   //   const stripe = useStripe();
   //   const urlParams = new URLSearchParams(window.location.search);
   //   const [paymentIntent, setPaymentIntent] = React.useState();
@@ -134,7 +153,7 @@ export default function Checkout() {
                             variant="body1"
                             gutterBottom
                           >
-                            {paymentIntent?.id}
+                            {orders[orders.length - 1]?.id}
                           </Typography>
                         </Grid2>
                       </Grid2>
@@ -154,7 +173,9 @@ export default function Checkout() {
                             variant="body1"
                             gutterBottom
                           >
-                            {new Date(paymentIntent?.created).toUTCString()}
+                            {new Date(
+                              orders[orders.length - 1]?.created * 1000
+                            ).toUTCString()}
                           </Typography>
                         </Grid2>
                       </Grid2>
@@ -174,8 +195,9 @@ export default function Checkout() {
                             variant="body1"
                             gutterBottom
                           >
-                            {paymentIntent?.amount?.toLocaleString("en-US") +
-                              " VND"}
+                            {orders[orders.length - 1]?.amount?.toLocaleString(
+                              "en-US"
+                            ) + " VND"}
                           </Typography>
                         </Grid2>
                       </Grid2>
@@ -195,8 +217,9 @@ export default function Checkout() {
                             variant="body1"
                             gutterBottom
                           >
-                            {paymentIntent
-                              ? paymentIntent?.payment_method_types[0]
+                            {orders[orders.length - 1]
+                              ? orders[orders.length - 1]
+                                  ?.payment_method_types[0]
                               : 0}
                           </Typography>
                         </Grid2>

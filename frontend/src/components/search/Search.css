@@ -1,0 +1,47 @@
+.ais-SearchBox {
+  margin-bottom: 1em;
+}
+
+.ais-InstantSearch {
+  max-width: 960px;
+  width: 100%;
+  display: block;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.ais-Hits-list .ais-Hits-item {
+  margin-left: 0;
+  width: 100%;
+}
+
+.ais-Hits-item img {
+  margin-right: 1em;
+}
+
+.ais-InstantSearch .ais-Hits-list {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1em;
+  margin-left: 0;
+  margin-top: 0;
+}
+
+.hit {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* Adjust the gap as needed */
+}
+
+.hit-image-container {
+  flex-shrink: 0; /* Prevent the image from shrinking */
+}
+
+.hit-image {
+  max-width: 100px; /* Adjust the size as needed */
+  height: auto;
+}
+
+.hit-content {
+  flex-grow: 1; /* Allow the content to take up the remaining space */
+}

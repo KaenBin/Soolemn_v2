@@ -5,7 +5,7 @@ import { auth, db } from "./firebase";
 import { loadStripe } from "@stripe/stripe-js";
 
 export const stripePromise = loadStripe(
-  "pk_test_51P4emDIcJNDJCIe2VsWxjUWIhA5Q2sGY0Tb0aQuOdl62eYeWdVHTSE2XTGlqZ2jJV8TA17Q72tBKNlWoRElfHu7c00K3XUOt3C"
+  "pk_test_51PKu7WKAxOJ3FFjyyEdjlwGFImTasXNMOsSwUdIaUFFvvlL7gyFD2HDwMSvfvXPLC4DVaDshAkK7l7uhZfyUD5pL00s9uXRFza"
 );
 
 export const getCheckoutUrl = async (app, priceId) => {

@@ -6,9 +6,10 @@ import {
 } from "firebase/auth";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-import { auth, db, storage } from "./firebase";
+import { auth, db, storage, analytics } from "./firebase";
 import { getCheckoutUrl, getPortalUrl } from "./stripePayment";
 import { readFile, encodeImage } from "@/utils/utils";
+import { logEvent } from "firebase/analytics";
 
 class API {
   createAccount = async (form) => {
@@ -32,11 +33,7 @@ class API {
       },
     };
     await axios
-      .post(
-        "https://soolemn-service-v2.onrender.com/signup",
-        { ...form, userId },
-        config
-      )
+      .post("http://localhost:4000/signup", { ...form, userId }, config)
       .catch((e) => console.log(e));
   };
 
@@ -68,7 +65,7 @@ class API {
 
     return await axios
       .get(
-        `https://soolemn-service-v2.onrender.com/user/${id}`,
+        `http://localhost:4000/user/${id}`,
         { params: { email: id } },
         config
       )
@@ -234,6 +231,7 @@ class API {
     const productSnap = await getDoc(productRef);
     console.log(id);
     if (productSnap.exists()) {
+      logEvent(analytics, "view_item", productSnap.data());
       return productSnap.data();
     } else {
       console.log("No such document!");
@@ -248,8 +246,9 @@ class API {
       },
     };
     return await axios
-      .get("https://soolemn-service-v2.onrender.com/get-products", config)
+      .get("http://localhost:4000/get-products", config)
       .then((res) => {
+        logEvent(analytics, "view_item_list", res.data);
         return { products: res.data, total: res.data.length };
       })
       .catch((e) => console.log(e));
@@ -270,7 +269,7 @@ class API {
 
     return await axios
       .post(
-        "https://soolemn-service-v2.onrender.com/product/add",
+        "http://localhost:4000/product/add",
         {
           ...data,
           vendorId: userId,
@@ -309,10 +308,11 @@ class API {
     };
     try {
       const response = await axios.post(
-        `https://soolemn-service-v2.onrender.com/add_to_cart/${auth.currentUser?.uid}/${item.productId}`,
+        `http://localhost:4000/add_to_cart/${auth.currentUser?.uid}/${item.productId}`,
         { quantity: item.quantity },
         config
       );
+      logEvent(analytics, "add_to_cart", item);
       return response.data;
     } catch (error) {
       console.error("Error adding to cart:", error);
@@ -330,7 +330,7 @@ class API {
 
     try {
       const response = await axios.put(
-        `https://soolemn-service-v2.onrender.com/update_cart/${auth.currentUser?.uid}/${productId}`,
+        `http://localhost:4000/update_cart/${auth.currentUser?.uid}/${productId}`,
         { quantity },
         config
       );
@@ -351,9 +351,10 @@ class API {
 
     try {
       const response = await axios.delete(
-        `https://soolemn-service-v2.onrender.com/delete_from_cart/${auth.currentUser?.uid}/${productId}`,
+        `http://localhost:4000/delete_from_cart/${auth.currentUser?.uid}/${productId}`,
         config
       );
+      logEvent(analytics, "remove_from_cart", productId);
       return response.data;
     } catch (error) {
       console.error("Error deleting from cart:", error);
@@ -371,9 +372,10 @@ class API {
 
     try {
       const response = await axios.delete(
-        `https://soolemn-service-v2.onrender.com/delete_all_cart/${auth.currentUser?.uid}`,
+        `http://localhost:4000/delete_all_cart/${auth.currentUser?.uid}`,
         config
       );
+      logEvent(analytics, "remove_from_cart");
       return response.data;
     } catch (error) {
       console.error("Error deleting all from cart:", error);
@@ -399,14 +401,14 @@ class API {
 
     try {
       const response = await axios.post(
-        `https://soolemn-service-v2.onrender.com/payment/checkout/${userId}/${productId}`,
+        `http://localhost:4000/payment/checkout/${userId}/${productId}`,
         {
           quantity,
           base_url: window.location.origin,
         },
         config
       );
-
+      logEvent(analytics, "begin_checkout", response.data);
       window.location.replace(response.data.url);
     } catch (error) {
       console.error("Error paying product:", error);
@@ -427,13 +429,14 @@ class API {
 
     try {
       const response = await axios.post(
-        `https://soolemn-service-v2.onrender.com/payment/checkout/${userId}`,
+        `http://localhost:4000/payment/checkout/${userId}`,
         {
           data,
           base_url: window.location.origin,
         },
         config
       );
+      logEvent(analytics, "begin_checkout", response.data);
       window.location.replace(response.data.url);
     } catch (error) {
       console.error("Error creating checkout:", error);
@@ -454,7 +457,7 @@ class API {
 
     try {
       const response = await axios.get(
-        `https://soolemn-service-v2.onrender.com/order/get-orders/${userId}/${orderId}`,
+        `http://localhost:4000/order/get-orders/${userId}/${orderId}`,
         config
       );
       return response;
@@ -477,7 +480,7 @@ class API {
 
     try {
       const response = await axios.get(
-        `https://soolemn-service-v2.onrender.com/order/get-orders/${userId}`,
+        `http://localhost:4000/order/get-orders/${userId}`,
         config
       );
       return response;
@@ -500,7 +503,7 @@ class API {
 
     try {
       const response = await axios.get(
-        "https://soolemn-service-v2.onrender.com/order/get-all",
+        "http://localhost:4000/order/get-all",
         config
       );
       return response.data;
@@ -523,7 +526,7 @@ class API {
     console.log(orderId, data);
     try {
       const response = await axios.post(
-        `https://soolemn-service-v2.onrender.com/order/update/${orderId}`,
+        `http://localhost:4000/order/update/${orderId}`,
         data,
         config
       );
@@ -702,7 +705,7 @@ class API {
     console.log(cart);
     try {
       const response = await axios.post(
-        `https://soolemn-service-v2.onrender.com/create-payment-intent`,
+        `http://localhost:4000/create-payment-intent`,
         {
           price: cart
             .map((product) => product.price * product.quantity)

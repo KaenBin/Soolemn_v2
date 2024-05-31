@@ -9,6 +9,7 @@ async function createStripeCheckout(data, type) {
 
   if (type === "single") {
     const product = await stripe.products.retrieve(data.productId);
+    console.log(product);
     const session = await stripe.checkout.sessions.create({
       line_items: [
         {
@@ -33,6 +34,7 @@ async function createStripeCheckout(data, type) {
       };
     });
     const line_items = await Promise.all(line_itemsPromises);
+    console.log(line_items);
     const session = await stripe.checkout.sessions.create({
       line_items,
       mode: "payment",

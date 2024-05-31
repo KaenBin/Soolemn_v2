@@ -39,7 +39,7 @@ function* productSaga({ type, payload }) {
         yield initRequest();
         const state = yield select();
         const result = yield call(apiInstance.getProducts);
-
+        console.log(result);
         if (result.products.length === 0) {
           handleError("No items found.");
         } else {

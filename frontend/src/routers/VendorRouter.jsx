@@ -18,7 +18,6 @@ const VendorRouter = () => {
       case "shop":
         return "Manage Shop";
       default:
-        alert("Page not found");
         break;
     }
   };
@@ -28,6 +27,11 @@ const VendorRouter = () => {
       <main className="content" style={{ paddingTop: 0 }}>
         <SideBar selectedTab={selectedTab()} />
         <Routes>
+          <Route
+            exact
+            path="/"
+            element={<Navigate to="/dashboard" replace />}
+          />
           <Route
             exact
             path="/signin"
@@ -46,7 +50,7 @@ const VendorRouter = () => {
           <Route path={ROUTES.ADMIN_USERS} Component={page.UserManage} />
         </Routes>
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

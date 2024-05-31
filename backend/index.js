@@ -8,6 +8,8 @@ const {
   getImageDownloadUrl,
   uploadImage,
   getProduct,
+  addProducts,
+  deleteAllProducts,
 } = require("./services/product");
 const {
   addToCart,
@@ -84,6 +86,15 @@ app.post("/product/add", async (req, res) => {
   }
 });
 
+app.post("/product/add-multiple", async (req, res) => {
+  try {
+    const response = await addProducts(req.body);
+    res.send(response);
+  } catch (error) {
+    throw new Error(JSON.stringify({ status: 400, error: error.message }));
+  }
+});
+
 // app.post("/product/update", async (req, res) => {
 //   try {
 //     const response = await updateProduct(req.body);
@@ -105,6 +116,15 @@ app.get("/get-product", async (req, res) => {
 app.get("/get-products", async (req, res) => {
   try {
     const response = await getProducts(req, res);
+    res.send(response);
+  } catch (error) {
+    res.send(error);
+  }
+});
+
+app.delete("/product/delete-all", async (req, res) => {
+  try {
+    const response = await deleteAllProducts();
     res.send(response);
   } catch (error) {
     res.send(error);

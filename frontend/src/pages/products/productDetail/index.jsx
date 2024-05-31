@@ -43,6 +43,8 @@ export default function ProductDetail(props) {
   ];
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     apiInstance
       .getProduct(id)
       .then((product) => {

@@ -21,7 +21,7 @@ const ProductManage = () => {
       field: "name",
       headerName: "Name",
       align: "left",
-      flex: 1,
+      flex: 2,
       // cellClassName: "name-column--cell",
     },
     {
@@ -41,7 +41,7 @@ const ProductManage = () => {
     {
       field: "stripe_metadata_category",
       headerName: "Category",
-      flex: 2,
+      flex: 1,
     },
     {
       field: "stripe_metadata_stock",
@@ -110,9 +110,18 @@ const ProductManage = () => {
           },
         }}
       >
+        <Typography variant="h5" sx={{ color: colors.grey[100] }}>
+          Products
+        </Typography>
         <CustomButton
           startIcon={<AddCircleIcon />}
           onClick={() => History.navigate("/product/add")}
+          sx={{
+            width: "150px",
+            height: "40px",
+            fontSize: "12px",
+            left: "85%",
+          }}
         >
           Add Product
         </CustomButton>

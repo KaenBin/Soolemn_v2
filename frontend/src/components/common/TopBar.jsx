@@ -29,31 +29,32 @@ import Popover from "@mui/material/Popover";
 import { signOut } from "@/redux/actions/authActions";
 import * as ROUTE from "@/constants/routes";
 import apiInstance from "@/services/apiService";
+import { Search } from "../search/Search";
 
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.black, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.black, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: theme.spacing(2),
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-    width: "auto",
-  },
-}));
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
+// const Search = styled("div")(({ theme }) => ({
+//   position: "relative",
+//   borderRadius: theme.shape.borderRadius,
+//   backgroundColor: alpha(theme.palette.common.black, 0.15),
+//   "&:hover": {
+//     backgroundColor: alpha(theme.palette.common.black, 0.25),
+//   },
+//   marginRight: theme.spacing(2),
+//   marginLeft: theme.spacing(2),
+//   width: "100%",
+//   [theme.breakpoints.up("sm")]: {
+//     marginLeft: theme.spacing(3),
+//     width: "auto",
+//   },
+// }));
+// const SearchIconWrapper = styled("div")(({ theme }) => ({
+//   padding: theme.spacing(0, 2),
+//   height: "100%",
+//   position: "absolute",
+//   pointerEvents: "none",
+//   display: "flex",
+//   alignItems: "center",
+//   justifyContent: "center",
+// }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
@@ -225,7 +226,10 @@ export default function TopBar() {
                 Product
               </NavLink>
             </Stack>
-            <Search>
+            <div style={{ display: { xs: "none", md: "block" }, width: "25%" }}>
+              <Search />
+            </div>
+            {/* <Search>
               <SearchIconWrapper>
                 <SearchIcon />
               </SearchIconWrapper>
@@ -237,7 +241,7 @@ export default function TopBar() {
                 onKeyDown={handleSearchSubmit}
                 inputProps={{ "aria-label": "search" }}
               />
-            </Search>
+            </Search> */}
             <Stack
               direction="row"
               alignItems="center"
