@@ -231,7 +231,17 @@ class API {
     const productSnap = await getDoc(productRef);
     console.log(id);
     if (productSnap.exists()) {
-      logEvent(analytics, "view_item", productSnap.data());
+      const data = productSnap.data();
+      logEvent(analytics, "view_item", {
+        ...data,
+        items: [
+          {
+            item_id: id,
+            price: data.stripe_metadata_price,
+            quantity: data.stripe_metadata_stock,
+          },
+        ],
+      });
       return productSnap.data();
     } else {
       console.log("No such document!");
@@ -248,7 +258,17 @@ class API {
     return await axios
       .get("http://localhost:4000/get-products", config)
       .then((res) => {
-        logEvent(analytics, "view_item_list", res.data);
+        console.log(res.data);
+        logEvent(analytics, "view_item_list", {
+          ...res.data,
+          items: [
+            {
+              item_id: id,
+              price: res.data.stripe_metadata_price,
+              quantity: res.data.stripe_metadata_stock,
+            },
+          ],
+        });
         return { products: res.data, total: res.data.length };
       })
       .catch((e) => console.log(e));
@@ -312,7 +332,10 @@ class API {
         { quantity: item.quantity },
         config
       );
-      logEvent(analytics, "add_to_cart", item);
+      console.log(item);
+      logEvent(analytics, "add_to_cart", {
+        items: [{ ...item, item_id: item.productId }],
+      });
       return response.data;
     } catch (error) {
       console.error("Error adding to cart:", error);
@@ -537,164 +560,6 @@ class API {
     }
   };
 
-  // getProducts = (lastRefKey) => {
-  //   let didTimeout = false;
-
-  //   return new Promise((resolve, reject) => {
-  //     (async () => {
-  //       if (lastRefKey) {
-  //         try {
-  //           const query = this.db
-  //             .collection("products")
-  //             .orderBy(app.firestore.FieldPath.documentId())
-  //             .startAfter(lastRefKey)
-  //             .limit(12);
-
-  //           const snapshot = await query.get();
-  //           const products = [];
-  //           snapshot.forEach((doc) =>
-  //             products.push({ id: doc.id, ...doc.data() })
-  //           );
-  //           const lastKey = snapshot.docs[snapshot.docs.length - 1];
-
-  //           resolve({ products, lastKey });
-  //         } catch (e) {
-  //           reject(e?.message || ":( Failed to fetch products.");
-  //         }
-  //       } else {
-  //         const timeout = setTimeout(() => {
-  //           didTimeout = true;
-  //           reject(new Error("Request timeout, please try again"));
-  //         }, 15000);
-
-  //         try {
-  //           const totalQuery = await this.db.collection("products").get();
-  //           const total = totalQuery.docs.length;
-  //           const query = this.db
-  //             .collection("products")
-  //             .orderBy(app.firestore.FieldPath.documentId())
-  //             .limit(12);
-  //           const snapshot = await query.get();
-
-  //           clearTimeout(timeout);
-  //           if (!didTimeout) {
-  //             const products = [];
-  //             snapshot.forEach((doc) =>
-  //               products.push({ id: doc.id, ...doc.data() })
-  //             );
-  //             const lastKey = snapshot.docs[snapshot.docs.length - 1];
-
-  //             resolve({ products, lastKey, total });
-  //           }
-  //         } catch (e) {
-  //           if (didTimeout) return;
-  //           reject(e?.message || ":( Failed to fetch products.");
-  //         }
-  //       }
-  //     })();
-  //   });
-  // };
-
-  // searchProducts = (searchKey) => {
-  //   let didTimeout = false;
-
-  //   return new Promise((resolve, reject) => {
-  //     (async () => {
-  //       const productsRef = this.db.collection("products");
-
-  //       const timeout = setTimeout(() => {
-  //         didTimeout = true;
-  //         reject(new Error("Request timeout, please try again"));
-  //       }, 15000);
-
-  //       try {
-  //         const searchedNameRef = productsRef
-  //           .orderBy("name_lower")
-  //           .where("name_lower", ">=", searchKey)
-  //           .where("name_lower", "<=", `${searchKey}\uf8ff`)
-  //           .limit(12);
-  //         const searchedKeywordsRef = productsRef
-  //           .orderBy("dateAdded", "desc")
-  //           .where("keywords", "array-contains-any", searchKey.split(" "))
-  //           .limit(12);
-
-  //         // const totalResult = await totalQueryRef.get();
-  //         const nameSnaps = await searchedNameRef.get();
-  //         const keywordsSnaps = await searchedKeywordsRef.get();
-  //         // const total = totalResult.docs.length;
-
-  //         clearTimeout(timeout);
-  //         if (!didTimeout) {
-  //           const searchedNameProducts = [];
-  //           const searchedKeywordsProducts = [];
-  //           let lastKey = null;
-
-  //           if (!nameSnaps.empty) {
-  //             nameSnaps.forEach((doc) => {
-  //               searchedNameProducts.push({ id: doc.id, ...doc.data() });
-  //             });
-  //             lastKey = nameSnaps.docs[nameSnaps.docs.length - 1];
-  //           }
-
-  //           if (!keywordsSnaps.empty) {
-  //             keywordsSnaps.forEach((doc) => {
-  //               searchedKeywordsProducts.push({ id: doc.id, ...doc.data() });
-  //             });
-  //           }
-
-  //           // MERGE PRODUCTS
-  //           const mergedProducts = [
-  //             ...searchedNameProducts,
-  //             ...searchedKeywordsProducts,
-  //           ];
-  //           const hash = {};
-
-  //           mergedProducts.forEach((product) => {
-  //             hash[product.id] = product;
-  //           });
-
-  //           resolve({ products: Object.values(hash), lastKey });
-  //         }
-  //       } catch (e) {
-  //         if (didTimeout) return;
-  //         reject(e);
-  //       }
-  //     })();
-  //   });
-  // };
-
-  // getFeaturedProducts = (itemsCount = 12) =>
-  //   this.db
-  //     .collection("products")
-  //     .where("isFeatured", "==", true)
-  //     .limit(itemsCount)
-  //     .get();
-
-  // getRecommendedProducts = (itemsCount = 12) =>
-  //   this.db
-  //     .collection("products")
-  //     .where("isRecommended", "==", true)
-  //     .limit(itemsCount)
-  //     .get();
-
-  // addProduct = (id, product) =>
-  //   this.db.collection("products").doc(id).set(product);
-
-  // generateKey = () => this.db.collection("products").doc().id;
-
-  // uploadImage = async (id, folder, imageFile) => {
-  //   const snapshot = await storage.ref(folder).child(id).put(imageFile);
-  //   const downloadURL = await snapshot.ref.getDownloadURL();
-
-  //   return downloadURL;
-  // };
-
-  // deleteImage = (id) => this.storage.ref("products").child(id).delete();
-
-  // editProduct = (id, updates) =>
-  //   this.db.collection("products").doc(id).update(updates);
-
-  // removeProduct = (id) => this.db.collection("products").doc(id).delete();
   createPaymentIntent = async (cart) => {
     const config = {
       headers: {
@@ -747,6 +612,26 @@ class API {
       return response.data;
     } catch (error) {
       console.error("Error getting coordinates:", error);
+      throw error;
+    }
+  };
+
+  calculateAllMinMax = async () => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    };
+    try {
+      const response = await axios.post(
+        `http://localhost:4000/inventory/calculate-all-min-max`,
+        config
+      );
+      console.log(response);
+      return response;
+    } catch (error) {
+      console.error("Error calculating all min max:", error);
       throw error;
     }
   };

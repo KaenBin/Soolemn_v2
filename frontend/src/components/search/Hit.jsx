@@ -20,23 +20,10 @@ import img from "@/assets/OIP.jpg";
 import { StyledRating } from "@/utils/utils";
 import { Link, useParams } from "react-router-dom";
 import apiInstance from "@/services/apiService";
-import { logEvent } from "firebase/analytics";
-import { analytics } from "../../../services/firebase";
 
-const ProductContainer = (props) => {
-  const handleProduct = () => {
-    logEvent(analytics, "click_item", {
-      items: [
-        {
-          item_id: props.item?.id,
-          price: props.item?.metadata?.price,
-          quantity: props.item?.metadata?.quantity,
-        },
-      ],
-    });
-    History.navigate(`/product/${props.item.id}`);
-  };
-
+const Hit = (props) => {
+  const handleProduct = () =>
+    History.navigate(`/product/${props.hit.objectID}`);
   return (
     <Card
       id={"product-" + props.idx}
@@ -54,8 +41,8 @@ const ProductContainer = (props) => {
           aria-owns="mouse-over-popover"
           aria-haspopup="true"
           component="img"
-          height="320"
-          image={props.item.images[0] ? props.item.images[0] : img}
+          height="300"
+          image={props.hit.images[0] ? props.hit.images[0] : img}
           alt="the image of a product"
         />
         {/* {props.size != "small" && <Typography variant="status">NEW</Typography>}
@@ -87,15 +74,15 @@ const ProductContainer = (props) => {
             variant="price1"
             maxWidth="205"
           >
-            {props.item.name}
+            {props.hit.name}
           </Typography>
           <Typography
             id={"discount-price-" + props.idx}
             display="inline"
             variant="price1"
           >
-            {/* ${(props.item.price / 2).toFixed(2)} */}
-            {Number(props.item?.stripe_metadata_price || 0).toLocaleString(
+            {/* ${(props.hit.price / 2).toFixed(2)} */}
+            {Number(props.hit?.stripe_metadata_price || 0).toLocaleString(
               "en-US"
             )}{" "}
             VND
@@ -106,7 +93,7 @@ const ProductContainer = (props) => {
               style={{ textDecorationLine: "line-through" }}
               variant="price2"
             >
-              {Number(props.item?.stripe_metadata_price || 0).toLocaleString(
+              {Number(props.hit?.stripe_metadata_price || 0).toLocaleString(
                 "en-US"
               ) || 0}{" "}
               VND{" "}
@@ -120,4 +107,4 @@ const ProductContainer = (props) => {
   );
 };
 
-export default ProductContainer;
+export default Hit;

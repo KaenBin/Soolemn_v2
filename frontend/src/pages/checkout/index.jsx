@@ -21,7 +21,12 @@ export default function Checkout() {
       .then((res) => {
         setOrders(res.data);
         setLoading(false);
-        logEvent(analytics, "purchase", res.data);
+        logEvent(analytics, "purchase", {
+          transaction_id: res.data[res.data.length - 1]?.id,
+          items: res.data,
+          value: res.data[res.data.length - 1]?.amount,
+          currency: "VND",
+        });
       })
       .catch((err) => {
         console.log(err);

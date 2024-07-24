@@ -23,6 +23,8 @@ const {
 } = require("./services/payment");
 const { getOrderByCustomer, updateOrderByID } = require("./services/order");
 const { getAllShipments, createShipment } = require("./services/shipping");
+const { calculateMinMax, calculateAllMinMax } = require("./services/inventory");
+
 const { stripe } = require("./services/configuration");
 
 const port = 4000;
@@ -276,8 +278,25 @@ app.get("/shipment/get-all", async (req, res) => {
 
 app.post("/shipment/create", async (req, res) => {
   try {
-    console.log(req);
     const response = await createShipment(req.body);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post("/inventory/calculate-min-max", async (req, res) => {
+  try {
+    const response = await calculateMinMax(req.body);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post("/inventory/calculate-all-min-max", async (req, res) => {
+  try {
+    const response = await calculateAllMinMax();
     res.send(response);
   } catch (error) {
     res.status(500).json({ error: error.message });

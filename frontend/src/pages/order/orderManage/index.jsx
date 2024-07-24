@@ -69,7 +69,7 @@ const OrderManage = () => {
       headerAlign: "center",
       flex: 1,
       valueGetter: (value, row) => {
-        return row.metadata.delivery_status || "Delivered";
+        return row.metadata?.delivery_status || "Delivered";
       },
     },
     {
@@ -110,13 +110,9 @@ const OrderManage = () => {
                     backgroundColor: colors.greenAccent[700],
                     borderRadius: "4px",
                   }}
-                  disabled={
-                    metadata.delivery_status == "Delivering" ||
-                    metadata.delivery_status == "Delivered"
-                  }
+                  disabled={metadata.delivery_status != "Pending"}
                 >
-                  {metadata.delivery_status == "Delivering" ||
-                  metadata.delivery_status == "Delivered"
+                  {metadata.delivery_status != "Pending"
                     ? "Approved"
                     : "Approve"}
                 </Button>

@@ -1,13 +1,25 @@
 import React, { createElement } from "react";
+import { logEvent } from "firebase/analytics";
+import { analytics } from "../../services/firebase";
 
 export function ProductItem({ hit, components }) {
+  console.log(hit);
   const handleItemClick = () => {
+    logEvent(analytics, "click_item", {
+      items: [
+        {
+          item_id: hit.objectID,
+          price: hit.metadata.price,
+          quantity: hit.metadata.quantity,
+        },
+      ],
+    });
     window.location.replace(
       window.location.origin + "/product/" + hit.objectID
     );
   };
   return (
-    <article onClick={handleItemClick} className="hit">
+    <article onClick={handleItemClick} className="hit" role="button">
       <div className="hit-image-container">
         <img className="hit-image" src={hit.images[0]} alt={hit.name} />
       </div>
